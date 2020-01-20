@@ -32,6 +32,11 @@ final class AddUserViewModel: ObservableObject {
     @Published
     var isValidName: Bool = false
 
+    @Published
+    var alertText: String = ""
+    @Published
+    var shouldShowAlert: Bool = false
+
     func commit() {
         publisher
             .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
@@ -43,23 +48,31 @@ final class AddUserViewModel: ObservableObject {
         }
             // Output - Bool
             // Error - Never
-        .receive(on: DispatchQueue.main)
-        .sink(receiveValue: { isValid in
-            self.isValidName = isValid
-            self.isFetchingData = false
-        })
-        .store(in: &subscribers)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { isValid in
+                self.isValidName = isValid
+                self.isFetchingData = false
+            })
+            .store(in: &subscribers)
     }
 
     func registerAndAddUser(in userViewModel: UsersViewModel) {
         isRegisteringUser = true
         manager.addUser(for: name)
-            .receive(on: DispatchQueue.main)
-            .sink { viewModel in
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .failure(let error):
+                    self.alertText = error.localizedDescription
+                    self.shouldShowAlert = true
+                    self.isRegisteringUser = false
+                default:
+                    break
+                }
+            }, receiveValue: { userListViewModel in
                 self.isRegisteringUser = false
-                userViewModel.users.append(viewModel)
-        }
-        .store(in: &subscribers)
+                userViewModel.users.append(userListViewModel)
+            })
+            .store(in: &subscribers)
     }
-
 }

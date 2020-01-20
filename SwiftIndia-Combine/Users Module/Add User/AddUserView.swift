@@ -45,6 +45,10 @@ struct AddUserView: View {
                 .modifiedButton()
                 .foregroundColor(!$viewModel.isValidName.wrappedValue ? Color.orange : Color.white)
                 .disabled(!$viewModel.isValidName.wrappedValue)
+                .alert(isPresented: $viewModel.shouldShowAlert) {
+                    Alert(title: Text("Error"),
+                          message: Text($viewModel.alertText.wrappedValue))
+            }
 
             Spacer()
                 .navigationBarTitle("Add User")

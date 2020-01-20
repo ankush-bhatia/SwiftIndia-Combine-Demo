@@ -9,6 +9,17 @@
 import Foundation
 import Combine
 
+enum UserRegisterationError: Error {
+    case unableToRegister
+
+    var localizedDescription: String {
+        switch self {
+        case .unableToRegister:
+            return "Unable to register the user."
+        }
+    }
+}
+
 class Manager {
 
     // API Call
@@ -21,12 +32,13 @@ class Manager {
         return future
     }
 
-    func addUser(for name: String) -> Future<UserListItemViewModel, Never> {
-        let future = Future<UserListItemViewModel, Never> { promise in
+    func addUser(for name: String) -> Future<UserListItemViewModel, UserRegisterationError> {
+        let future = Future<UserListItemViewModel, UserRegisterationError> { promise in
             DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
                 let user = User(name: name)
                 let userListItemViewModel = UserListItemViewModel(with: user)
-                promise(.success(userListItemViewModel))
+                //promise(.success(userListItemViewModel))
+                promise(.failure(.unableToRegister))
             }
         }
         return future
