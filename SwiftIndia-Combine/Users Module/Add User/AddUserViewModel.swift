@@ -18,7 +18,7 @@ final class AddUserViewModel: ObservableObject {
 
     @Published
     var name: String = "" {
-        willSet {
+        didSet {
             isFetchingData = true
             publisher.send(name)
         }

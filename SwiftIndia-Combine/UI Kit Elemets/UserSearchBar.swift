@@ -13,9 +13,12 @@ import Combine
 struct UserSearchBar: UIViewRepresentable {
 
     typealias UIViewType = UISearchBar
-    @Binding var searchText: String
-    @Binding var isFetching: Bool
+
+    @State private var searchText: String = ""
+
+    @Binding var searchedText: String
     @Binding var isSearching: Bool
+    @Binding var isFetching: Bool
 
     func makeUIView(context: UIViewRepresentableContext<UserSearchBar>) -> UISearchBar {
         let searchBar = UISearchBar()
@@ -30,7 +33,10 @@ struct UserSearchBar: UIViewRepresentable {
     }
 
     func makeCoordinator() -> SearchBarCoordinator {
-        let coordinator = SearchBarCoordinator(with: $searchText, isFetchingData: $isFetching, isSearching: $isSearching)
+        let coordinator = SearchBarCoordinator(with: $searchText,
+                                               isSearching: $isSearching,
+                                               searchTextForApiCall: $searchedText,
+                                               isFetching: $isFetching)
         coordinator.debounced()
         return coordinator
     }
@@ -39,27 +45,28 @@ struct UserSearchBar: UIViewRepresentable {
 
 class SearchBarCoordinator: NSObject, UISearchBarDelegate {
     var text: Binding<String>
-    var isFetchingData: Binding<Bool>
+    var searchTextForApiCall: Binding<String>
     var isSearching: Binding<Bool>
+    var isFetching: Binding<Bool>
     let subject = PassthroughSubject<String, Never>()
     private var subscribers = Set<AnyCancellable>()
 
     init(with searchText: Binding<String>,
-         isFetchingData: Binding<Bool>,
-         isSearching: Binding<Bool>) {
+         isSearching: Binding<Bool>,
+         searchTextForApiCall: Binding<String>,
+         isFetching: Binding<Bool>) {
         self.text = searchText
-        self.isFetchingData = isFetchingData
         self.isSearching = isSearching
+        self.searchTextForApiCall = searchTextForApiCall
+        self.isFetching = isFetching
     }
 
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String) {
-        isFetchingData.wrappedValue = true
-        subject.send(searchText)
-    }
-
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        text.wrappedValue = searchText
         isSearching.wrappedValue = true
+        isFetching.wrappedValue = true
+        subject.send(searchText)
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -69,10 +76,9 @@ class SearchBarCoordinator: NSObject, UISearchBarDelegate {
 
     func debounced() {
         subject
-            .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .sink { value in
-                self.text.wrappedValue = value
-                self.isFetchingData.wrappedValue = false
+                self.searchTextForApiCall.wrappedValue = value
         }
         .store(in: &subscribers)
     }

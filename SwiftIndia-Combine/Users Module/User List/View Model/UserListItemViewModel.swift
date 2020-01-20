@@ -8,9 +8,9 @@
 
 import Foundation
 
-final class UserListItemViewModel: ObservableObject, Hashable, Equatable {
+final class UserListItemViewModel: Hashable, Equatable {
 
-    @Published var name: String = ""
+    var name: String = ""
     let id = UUID()
 
     func hash(into hasher: inout Hasher) {

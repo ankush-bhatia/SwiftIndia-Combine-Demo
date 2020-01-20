@@ -10,11 +10,11 @@ import Foundation
 import Combine
 
 protocol UsersServiceProtocol {
-    func fetchUsers() -> Future<[User], Never>
+    func fetchUsers(for searchedText: String) -> Future<[User], Never>
 }
 
 struct UserService: UsersServiceProtocol {
-    func fetchUsers() -> Future<[User], Never> {
+    func fetchUsers(for searchedText: String) -> Future<[User], Never> {
         let users = [
             User(name: "Ankush Bhatia"),
             User(name: "Rajesh"),
@@ -30,8 +30,13 @@ struct UserService: UsersServiceProtocol {
 
         // Creating future publisher
         let future = Future<[User], Never> { promise in
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
-                promise(.success(users))
+            DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
+                if searchedText == "" {
+                    promise(.success(users))
+                } else {
+                    let users = users.filter({ $0.name.lowercased().contains(searchedText.lowercased()) })
+                    promise(.success(users))
+                }
             }
         }
 

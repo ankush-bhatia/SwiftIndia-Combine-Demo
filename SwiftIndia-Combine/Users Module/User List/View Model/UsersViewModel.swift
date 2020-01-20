@@ -13,6 +13,15 @@ final class UsersViewModel: ObservableObject {
 
     // MARK: - Properties
     @Published var users: [UserListItemViewModel] = []
+
+    @Published var searchText: String = "" {
+        didSet {
+            fetchUsers(for: searchText)
+        }
+    }
+
+    @Published var isFetching: Bool = false
+
     private let service: UsersServiceProtocol
 
     private var subscribers = Set<AnyCancellable>()
@@ -20,13 +29,13 @@ final class UsersViewModel: ObservableObject {
     // MARK: - Initialisers
     init(with service: UsersServiceProtocol) {
         self.service = service
-        fetchUsers()
+        fetchUsers(for: "")
     }
 
     // MARK: - Functions
-    func fetchUsers() {
+    private func fetchUsers(for searchedText: String) {
         service
-            .fetchUsers()
+            .fetchUsers(for: searchedText)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] result in
                 switch result {
@@ -37,6 +46,7 @@ final class UsersViewModel: ObservableObject {
                 }
                 }, receiveValue: { [weak self] users in
                     self?.users = users.map({ UserListItemViewModel(with: $0) })
+                    self?.isFetching = false
             })
             .store(in: &subscribers)
     }

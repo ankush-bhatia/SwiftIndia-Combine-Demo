@@ -11,8 +11,6 @@ import SwiftUI
 struct UsersView: View {
 
     // MARK: - Dependencies
-    @State private var searchText: String = ""
-    @State private var isFetching: Bool = false
     @State private var isSearching: Bool = false
     @ObservedObject var viewModel: UsersViewModel
 
@@ -20,18 +18,17 @@ struct UsersView: View {
     private let addUserImageName = "plus"
 
     // MARK: - Body
-
     var body: some View {
         NavigationView {
             GeometryReader { proxy in
                 VStack {
 
                     HStack {
-                        UserSearchBar(searchText: self.$searchText,
-                                      isFetching: self.$isFetching,
-                                      isSearching: self.$isSearching)
+                        UserSearchBar(searchedText: self.$viewModel.searchText,
+                                      isSearching: self.$isSearching,
+                                      isFetching: self.$viewModel.isFetching)
 
-                        if self.isFetching {
+                        if self.viewModel.isFetching {
                             UserAcitivityIndicator()
                         }
 
@@ -46,7 +43,7 @@ struct UsersView: View {
                     }
                     .padding(.horizontal, 10.0)
 
-                    UserListView(viewModel: self.viewModel, for: self.$searchText)
+                    UserListView(viewModel: self.viewModel.users)
 
                     NavigationLink(destination: AddUserView(userViewModel: self.viewModel)) {
                         HStack {

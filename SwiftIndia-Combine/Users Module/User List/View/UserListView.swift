@@ -10,23 +10,16 @@ import SwiftUI
 
 struct UserListView: View {
 
-    @ObservedObject var viewModel: UsersViewModel
-    @Binding private var text: String
+    var viewModel: [UserListItemViewModel]
 
-    init(viewModel: UsersViewModel, for searchedText: Binding<String>) {
+    init(viewModel: [UserListItemViewModel]) {
         self.viewModel = viewModel
-        self._text = searchedText
     }
 
     var body: some View {
-        List(viewModel.users.filter({ itemViewModel -> Bool in
-            if text == "" {
-                return true
-            }
-            return itemViewModel.name.lowercased().contains(text.lowercased())
-        }), id: \.self, rowContent: { user in
-            Text("\(user.name)")
-        })
+        List(viewModel, id: \.self) { item in
+            Text(item.name)
+        }
     }
 }
 
@@ -36,8 +29,8 @@ struct UserListView_Previews: PreviewProvider {
 
     static var previews: some View {
         let service = UserService()
-        
+
         let viewModel = UsersViewModel(with: service)
-        return UserListView(viewModel: viewModel, for: $searchedText)
+        return UserListView(viewModel: viewModel.users)
     }
 }
