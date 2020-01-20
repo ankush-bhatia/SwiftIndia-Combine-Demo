@@ -114,8 +114,8 @@
 		965CD8CB23D4645700FF0ACB /* Users Module */ = {
 			isa = PBXGroup;
 			children = (
-				965CD8C523D4616F00FF0ACB /* Add User */,
 				965CD8BE23D453DA00FF0ACB /* User List */,
+				965CD8C523D4616F00FF0ACB /* Add User */,
 				965CD8C823D4620100FF0ACB /* Model */,
 			);
 			path = "Users Module";

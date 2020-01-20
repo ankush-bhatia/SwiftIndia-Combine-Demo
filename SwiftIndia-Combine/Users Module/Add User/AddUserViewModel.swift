@@ -35,9 +35,14 @@ final class AddUserViewModel: ObservableObject {
     func commit() {
         publisher
             .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
+
+            // Output - String
+            // Error - Never
             .flatMap { value in
                 return self.manager.isUserNameValid(for: self.name)
         }
+            // Output - Bool
+            // Error - Never
         .receive(on: DispatchQueue.main)
         .sink(receiveValue: { isValid in
             self.isValidName = isValid

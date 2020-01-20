@@ -12,15 +12,18 @@ import Combine
 final class UsersViewModel: ObservableObject {
 
     // MARK: - Properties
-    @Published var users: [UserListItemViewModel] = []
+    @Published
+    var users: [UserListItemViewModel] = []
 
-    @Published var searchText: String = "" {
+    @Published
+    var searchText: String = "" {
         didSet {
             fetchUsers(for: searchText)
         }
     }
 
-    @Published var isFetching: Bool = false
+    @Published
+    var isFetching: Bool = false
 
     private let service: UsersServiceProtocol
 
