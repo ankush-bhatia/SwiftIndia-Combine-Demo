@@ -59,7 +59,25 @@ final class AddUserViewModel: ObservableObject {
     func registerAndAddUser(in userViewModel: UsersViewModel) {
         isRegisteringUser = true
         manager.addUser(for: name)
+//            .print()
             .receive(on: RunLoop.main)
+
+            // Output Type: UserListItemViewModel
+            // Error: UserRegisterationError
+
+//            .catch({ error in
+//                Just(UserListItemViewModel(with: User(name: "Placeholder User")))
+//            })
+
+            // .retry(2)
+
+            // Output Type: UserListItemViewModel
+            // Error: Never
+
+//            .mapError({ error in
+//                return UserRegisterationError.unableToRegister
+//            })
+
             .sink(receiveCompletion: { result in
                 switch result {
                 case .failure(let error):

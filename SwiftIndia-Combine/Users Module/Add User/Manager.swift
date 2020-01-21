@@ -11,11 +11,14 @@ import Combine
 
 enum UserRegisterationError: Error {
     case unableToRegister
+    case noInternetConnection
 
     var localizedDescription: String {
         switch self {
         case .unableToRegister:
             return "Unable to register the user."
+        case .noInternetConnection:
+            return "Please check your internet connection."
         }
     }
 }
