@@ -9,6 +9,12 @@
 import Foundation
 import Combine
 
+enum UserViewState {
+    case fetchingData
+    case searching
+    case idle
+}
+
 final class UsersViewModel: ObservableObject {
 
     // MARK: - Properties
@@ -16,14 +22,15 @@ final class UsersViewModel: ObservableObject {
     var users: [UserListItemViewModel] = []
 
     @Published
-    var searchText: String = "" {
+    var searchedText: String = "" {
         didSet {
-            fetchUsers(for: searchText)
+            viewState = .fetchingData
+            fetchUsers(for: searchedText)
         }
     }
 
     @Published
-    var isFetching: Bool = false
+    var viewState: UserViewState = .idle
 
     private let service: UsersServiceProtocol
 
@@ -49,7 +56,7 @@ final class UsersViewModel: ObservableObject {
                 }
                 }, receiveValue: { [weak self] users in
                     self?.users = users.map({ UserListItemViewModel(with: $0) })
-                    self?.isFetching = false
+                    self?.viewState = .idle
             })
             .store(in: &subscribers)
     }

@@ -23,6 +23,10 @@
 		96B58EE623C260B700CE4DD5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B58EE523C260B700CE4DD5 /* User.swift */; };
 		96B58EE823C2639A00CE4DD5 /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B58EE723C2639A00CE4DD5 /* UserListView.swift */; };
 		96B58EEA23C265CC00CE4DD5 /* UserSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B58EE923C265CC00CE4DD5 /* UserSearchBar.swift */; };
+		96BE960123D8C0190088FCBC /* Textfield+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BE960023D8C0190088FCBC /* Textfield+Extension.swift */; };
+		96BE960423D8C1040088FCBC /* SearchBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BE960323D8C1040088FCBC /* SearchBarCoordinator.swift */; };
+		96BE960623D8C2730088FCBC /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BE960523D8C2730088FCBC /* View+Extension.swift */; };
+		96BE960923D8C9700088FCBC /* KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BE960823D8C9700088FCBC /* KeyboardHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +48,10 @@
 		96B58EE523C260B700CE4DD5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		96B58EE723C2639A00CE4DD5 /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		96B58EE923C265CC00CE4DD5 /* UserSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchBar.swift; sourceTree = "<group>"; };
+		96BE960023D8C0190088FCBC /* Textfield+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Textfield+Extension.swift"; sourceTree = "<group>"; };
+		96BE960323D8C1040088FCBC /* SearchBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCoordinator.swift; sourceTree = "<group>"; };
+		96BE960523D8C2730088FCBC /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		96BE960823D8C9700088FCBC /* KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +68,7 @@
 		960EB90423D4AC3700C31561 /* UI Kit Elemets */ = {
 			isa = PBXGroup;
 			children = (
-				96B58EE923C265CC00CE4DD5 /* UserSearchBar.swift */,
+				96BE960223D8C0F20088FCBC /* Search Bar */,
 				960EB90223D4AC2E00C31561 /* UserAcitivityIndicator.swift */,
 			);
 			path = "UI Kit Elemets";
@@ -140,6 +148,8 @@
 		96B58ED023C2601600CE4DD5 /* SwiftIndia-Combine */ = {
 			isa = PBXGroup;
 			children = (
+				96BE960723D8C9620088FCBC /* Helper */,
+				96BE95FF23D8C0050088FCBC /* Extensions */,
 				965CD8CB23D4645700FF0ACB /* Users Module */,
 				960EB90423D4AC3700C31561 /* UI Kit Elemets */,
 				96B58ED123C2601600CE4DD5 /* AppDelegate.swift */,
@@ -159,6 +169,32 @@
 				96B58EDA23C2601800CE4DD5 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		96BE95FF23D8C0050088FCBC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				96BE960023D8C0190088FCBC /* Textfield+Extension.swift */,
+				96BE960523D8C2730088FCBC /* View+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		96BE960223D8C0F20088FCBC /* Search Bar */ = {
+			isa = PBXGroup;
+			children = (
+				96B58EE923C265CC00CE4DD5 /* UserSearchBar.swift */,
+				96BE960323D8C1040088FCBC /* SearchBarCoordinator.swift */,
+			);
+			path = "Search Bar";
+			sourceTree = "<group>";
+		};
+		96BE960723D8C9620088FCBC /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				96BE960823D8C9700088FCBC /* KeyboardHandler.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,13 +269,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				960EB90323D4AC2E00C31561 /* UserAcitivityIndicator.swift in Sources */,
+				96BE960123D8C0190088FCBC /* Textfield+Extension.swift in Sources */,
+				96BE960623D8C2730088FCBC /* View+Extension.swift in Sources */,
 				96B58EE623C260B700CE4DD5 /* User.swift in Sources */,
 				965CD8CA23D462C200FF0ACB /* UsersViewModel.swift in Sources */,
 				96B4F2E223D2282D00B74D4F /* AddUserView.swift in Sources */,
 				96B58EE823C2639A00CE4DD5 /* UserListView.swift in Sources */,
 				96B58EEA23C265CC00CE4DD5 /* UserSearchBar.swift in Sources */,
+				96BE960923D8C9700088FCBC /* KeyboardHandler.swift in Sources */,
 				960EB90123D49E0900C31561 /* AddUserViewModel.swift in Sources */,
 				96B58ED223C2601600CE4DD5 /* AppDelegate.swift in Sources */,
+				96BE960423D8C1040088FCBC /* SearchBarCoordinator.swift in Sources */,
 				965CD8C223D457FE00FF0ACB /* UserService.swift in Sources */,
 				96B58ED423C2601600CE4DD5 /* SceneDelegate.swift in Sources */,
 				965CD8C723D4618400FF0ACB /* Manager.swift in Sources */,

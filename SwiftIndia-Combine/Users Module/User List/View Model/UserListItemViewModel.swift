@@ -22,6 +22,6 @@ final class UserListItemViewModel: Hashable, Equatable {
     }
 
     static func == (lhs: UserListItemViewModel, rhs: UserListItemViewModel) -> Bool {
-        return lhs.id == rhs.id && lhs.name == rhs.name
+        return lhs.id == rhs.id
     }
 }

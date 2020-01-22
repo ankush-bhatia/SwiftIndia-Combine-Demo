@@ -10,11 +10,10 @@ import SwiftUI
 
 struct UsersView: View {
 
-    // MARK: - Dependencies
-    @State private var isSearching: Bool = false
+    // MARK: - Properties
+    @ObservedObject var keyboardHandler: KeyboardHandler
     @ObservedObject var viewModel: UsersViewModel
 
-    // MARK: - Properties
     private let addUserImageName = "plus"
 
     // MARK: - Body
@@ -24,18 +23,17 @@ struct UsersView: View {
                 VStack {
 
                     HStack {
-                        UserSearchBar(searchedText: self.$viewModel.searchText,
-                                      isSearching: self.$isSearching,
-                                      isFetching: self.$viewModel.isFetching)
+                        UserSearchBar(searchedTextForApiCall: self.$viewModel.searchedText,
+                                      viewState: self.$viewModel.viewState)
 
-                        if self.viewModel.isFetching {
-                            UserAcitivityIndicator()
+                        if self.viewModel.viewState == .fetchingData ||
+                            self.viewModel.viewState == .searching {
+                            UserAcitivityIndicator(tintColor: .gray)
                         }
 
-                        if self.isSearching {
+                        if self.keyboardHandler.state == .isVisible {
                             Button(action: {
                                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                self.isSearching = false
                             }) {
                                 Text("Done")
                             }
@@ -67,25 +65,7 @@ struct UsersView: View {
 struct ContentView_Previews: PreviewProvider {
     static let viewModel = UsersViewModel(with: UserService())
     static var previews: some View {
-        UsersView(viewModel: viewModel)
+        UsersView(keyboardHandler: KeyboardHandler(), viewModel: viewModel)
             .previewDevice(PreviewDevice(rawValue: "iPhone 11"))
     }
 }
-
-extension View {
-    func modifiedButton() -> some View {
-        ModifiedContent(content: self, modifier: ButtonModifier())
-    }
-}
-
-struct ButtonModifier: ViewModifier {
-
-    func body(content: Content) -> some View {
-        content
-            .frame(width: 200, height: 40, alignment: .center)
-            .background(Color.secondary)
-            .cornerRadius(4)
-            .padding([.top, .bottom], 10)
-    }
-}
-

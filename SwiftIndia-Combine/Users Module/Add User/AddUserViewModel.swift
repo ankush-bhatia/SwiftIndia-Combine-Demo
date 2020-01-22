@@ -9,36 +9,43 @@
 import Foundation
 import Combine
 
+enum AddUserViewState {
+    case isFetchingUserValidOrNot
+    case isRegisteringUser
+    case idle
+}
+
 final class AddUserViewModel: ObservableObject {
 
-    private let manager = Manager()
+    // MARK: - Properties
     private var subscribers = Set<AnyCancellable>()
 
-    let publisher = PassthroughSubject<String, Never>()
+    private let manager = Manager()
+    private let userValidationSearchPublisher = PassthroughSubject<String, Never>()
 
     @Published
     var name: String = "" {
         didSet {
-            isFetchingData = true
-            publisher.send(name)
+            viewState = .isFetchingUserValidOrNot
+            userValidationSearchPublisher.send(name)
         }
     }
 
     @Published
-    var isFetchingData: Bool = false
-    @Published
-    var isRegisteringUser: Bool = false
+    var viewState: AddUserViewState = .idle
 
     @Published
     var isValidName: Bool = false
 
     @Published
     var alertText: String = ""
+
     @Published
     var shouldShowAlert: Bool = false
 
-    func commit() {
-        publisher
+    // MARK: - Functions
+    func registerUserValidationSearchPublisher() {
+        userValidationSearchPublisher
             .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
 
             // Output - String
@@ -51,13 +58,13 @@ final class AddUserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { isValid in
                 self.isValidName = isValid
-                self.isFetchingData = false
+                self.viewState = .idle
             })
             .store(in: &subscribers)
     }
 
     func registerAndAddUser(in userViewModel: UsersViewModel) {
-        isRegisteringUser = true
+        self.viewState = .isRegisteringUser
         manager.addUser(for: name)
 //            .print()
             .receive(on: RunLoop.main)
@@ -83,12 +90,12 @@ final class AddUserViewModel: ObservableObject {
                 case .failure(let error):
                     self.alertText = error.localizedDescription
                     self.shouldShowAlert = true
-                    self.isRegisteringUser = false
+                    self.viewState = .idle
                 default:
                     break
                 }
             }, receiveValue: { userListViewModel in
-                self.isRegisteringUser = false
+                self.viewState = .idle
                 userViewModel.users.append(userListViewModel)
             })
             .store(in: &subscribers)

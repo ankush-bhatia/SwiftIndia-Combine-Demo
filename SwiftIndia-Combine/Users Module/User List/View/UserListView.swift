@@ -10,12 +10,15 @@ import SwiftUI
 
 struct UserListView: View {
 
+    // MARK: - Properties
     var viewModel: [UserListItemViewModel]
 
+    // MARK: - Initialisers
     init(viewModel: [UserListItemViewModel]) {
         self.viewModel = viewModel
     }
 
+    // MARK: - Body
     var body: some View {
         List(viewModel, id: \.self) { item in
             Text(item.name)

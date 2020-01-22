@@ -13,9 +13,13 @@ struct UserAcitivityIndicator: UIViewRepresentable {
 
     typealias UIViewType = UIActivityIndicatorView
 
+    // MARK: - Properties
+    var tintColor: UIColor
 
+    // MARK: - Functions
     func makeUIView(context: UIViewRepresentableContext<UserAcitivityIndicator>) -> UIActivityIndicatorView {
         let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.color = tintColor
         return activityIndicator
     }
 
