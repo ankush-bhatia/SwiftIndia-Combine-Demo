@@ -46,6 +46,7 @@ final class UsersViewModel: ObservableObject {
     private func fetchUsers(for searchedText: String) {
         service
             .fetchUsers(for: searchedText)
+            .print()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] result in
                 switch result {

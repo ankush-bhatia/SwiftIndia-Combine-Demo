@@ -40,8 +40,8 @@ class Manager {
             DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
                 let user = User(name: name)
                 let userListItemViewModel = UserListItemViewModel(with: user)
-                //promise(.success(userListItemViewModel))
-                promise(.failure(.unableToRegister))
+                promise(.success(userListItemViewModel))
+                //promise(.failure(.unableToRegister))
             }
         }
         return future

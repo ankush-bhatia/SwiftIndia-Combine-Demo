@@ -26,6 +26,7 @@ final class AddUserViewModel: ObservableObject {
     @Published
     var name: String = "" {
         didSet {
+            print(name)
             viewState = .isFetchingUserValidOrNot
             userValidationSearchPublisher.send(name)
         }
@@ -47,7 +48,7 @@ final class AddUserViewModel: ObservableObject {
     func registerUserValidationSearchPublisher() {
         userValidationSearchPublisher
             .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
-
+            .print()
             // Output - String
             // Error - Never
             .flatMap { value in
@@ -66,9 +67,9 @@ final class AddUserViewModel: ObservableObject {
     func registerAndAddUser(in userViewModel: UsersViewModel) {
         self.viewState = .isRegisteringUser
         manager.addUser(for: name)
-//            .print()
-            .receive(on: RunLoop.main)
-
+            .print()
+            .receive(on: DispatchQueue.main)
+            
             // Output Type: UserListItemViewModel
             // Error: UserRegisterationError
 
@@ -76,13 +77,13 @@ final class AddUserViewModel: ObservableObject {
 //                Just(UserListItemViewModel(with: User(name: "Placeholder User")))
 //            })
 
-            // .retry(2)
+//             .retry(2)
 
             // Output Type: UserListItemViewModel
             // Error: Never
-
+//
 //            .mapError({ error in
-//                return UserRegisterationError.unableToRegister
+//                return UserRegisterationError.noInternetConnection
 //            })
 
             .sink(receiveCompletion: { result in
